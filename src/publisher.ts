@@ -8,9 +8,12 @@ const client = mqtt.connect(MQTT_URI);
 
 const handleConnect: Function = () => {
   console.log(`Connected to ${MQTT_URI}`);
-  client.subscribe(['all', 'confirmed', 'death', 'recovered'], () => {
-    console.log(`Subscribed}`);
-  });
+  setInterval(() => {
+    client.publish('/all', '10,1,9');
+    client.publish('/confirmed', '10');
+    client.publish('/dead', '1');
+    client.publish('/recovered', '9');
+  }, 1000);
 };
 
 const handleMessage: OnMessageCallback = (
