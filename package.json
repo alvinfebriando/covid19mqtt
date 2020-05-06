@@ -1,7 +1,7 @@
 {
   "name": "covid19mqtt",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "repository": "https://github.com/alvinfebriando/covid19mqtt.git",
   "author": "Alvin Febriando <alvinfebriando@outlook.com>",
   "license": "MIT",
