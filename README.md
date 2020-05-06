@@ -1,20 +1,13 @@
 # covid19mqtt
 
-### Install dependencies
+## Step
 
 ```bash
 npm install
-```
-
-### Run development
-
-```bash
 npm run start:dev
-```
-
-### Run subscriber and publisher
-
-```bash
+# open in new terminal
 node build/subscriber
+# open in new terminal
 node build/publisher
+# run subscriber and publisher alongside with server
 ```
