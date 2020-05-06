@@ -1,0 +1,17 @@
+{
+  "name": "covid19mqtt",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/alvinfebriando/covid19mqtt.git",
+  "author": "Alvin Febriando <alvinfebriando@outlook.com>",
+  "license": "MIT",
+  "scripts": {
+    "start:dev": "concurrently 'tsc -w' 'nodemon build/server'",
+    "start": "tsc && node build/server"
+  },
+  "devDependencies": {
+    "concurrently": "^5.2.0",
+    "nodemon": "^2.0.3",
+    "typescript": "^3.8.3"
+  }
+}
