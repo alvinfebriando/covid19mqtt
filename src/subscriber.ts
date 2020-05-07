@@ -1,4 +1,9 @@
-import mqtt, { OnMessageCallback, Packet, OnErrorCallback } from 'mqtt';
+import mqtt, {
+  OnMessageCallback,
+  Packet,
+  OnErrorCallback,
+  OnPacketCallback,
+} from 'mqtt';
 
 const PROTOCOL = 'mqtt';
 const SERVER_URL = '127.0.0.1';
@@ -21,6 +26,19 @@ const handleMessage: OnMessageCallback = (
 
 const handleError: OnErrorCallback = (err: Error) => {
   console.log(err);
+};
+
+const handlePacketReceive: OnPacketCallback = packet => {
+  console.log(`Receive: ${packet.cmd}`);
+};
+
+const handlePacketSend: OnPacketCallback = packet => {
+  console.log(`Send: ${packet.cmd}`);
+};
+
+const debug = () => {
+  client.on('packetreceive', handlePacketReceive);
+  client.on('packetsend', handlePacketSend);
 };
 
 client.on('connect', handleConnect);
