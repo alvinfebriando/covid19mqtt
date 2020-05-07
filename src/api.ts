@@ -24,6 +24,8 @@ interface Summary {
   Date: Date;
 }
 
+let summary: Summary | {} = {};
+
 type Field =
   | 'NewDeaths'
   | 'TotalDeaths'
@@ -34,7 +36,8 @@ type Field =
 
 const getSummary = async (): Promise<Summary> => {
   const response = await got.get(API_URL + 'summary');
-  return JSON.parse(response.body);
+  summary = JSON.parse(response.body);
+  return <Summary>summary;
 };
 
 export const getGlobalSummary = async () => {
@@ -43,8 +46,13 @@ export const getGlobalSummary = async () => {
 };
 
 export const getCountrySummary = async (slug: string) => {
-  const summary = await getSummary();
-  const countries = summary.Countries;
+  let countries: CountryCovidData[];
+  if (summary !== null) {
+    const countrySummary = <Summary>summary;
+    countries = countrySummary.Countries;
+  } else {
+    countries = (await getSummary()).Countries;
+  }
   return countries.find(country => {
     return country.Slug === slug;
   });
