@@ -60,5 +60,5 @@ export const getField = (
   country: CountryCovidData | GlobalCovidData,
   field: Field
 ) => {
-  return country[field];
+  return country[field].toString();
 };
