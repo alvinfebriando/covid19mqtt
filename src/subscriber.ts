@@ -15,34 +15,31 @@ export class Subscriber {
   client: MqttClient;
   constructor() {
     this.client = mqtt.connect(MQTT_URI);
-    this.client.on('message', handleMessage);
-    this.client.on('error', handleError);
+    this.client.on('message', this.handleMessage);
+    this.client.on('error', this.handleError);
   }
 
   subscribe(topic: string) {
     this.client.subscribe(topic);
   }
 
-  unsubscribe(topic: string) {
-    this.client.unsubscribe(topic);
-  }
+  private handleConnect: Function = () => {
+    console.log(`Connected to ${MQTT_URI}`);
+  };
+
+  private handleMessage: OnMessageCallback = (
+    topic: string,
+    payload: Buffer,
+    packet: Packet
+  ) => {
+    console.log(payload.toString());
+    process.exit();
+  };
+
+  private handleError: OnErrorCallback = (err: Error) => {
+    console.log(err);
+  };
 }
-
-const handleConnect: Function = () => {
-  console.log(`Connected to ${MQTT_URI}`);
-};
-
-const handleMessage: OnMessageCallback = (
-  topic: string,
-  payload: Buffer,
-  packet: Packet
-) => {
-  console.log(payload.toString());
-};
-
-const handleError: OnErrorCallback = (err: Error) => {
-  console.log(err);
-};
 
 const handlePacketReceive: OnPacketCallback = packet => {
   console.log(`Receive: ${packet.cmd}`);
