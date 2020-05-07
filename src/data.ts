@@ -3,11 +3,11 @@ import { promisify } from 'util';
 
 const readFile = promisify(fs.readFile);
 
-type Country = {
+interface Country {
   Country: string;
   Slug: string;
   ISO2: string;
-};
+}
 
 export const getCountries = async () => {
   return <Country[]>JSON.parse(

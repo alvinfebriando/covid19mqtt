@@ -2,33 +2,27 @@ import got from 'got';
 
 const API_URL = 'https://api.covid19api.com/';
 
-export type GlobalCovidData = {
+export interface GlobalCovidData {
   NewConfirmed: number;
   TotalConfirmed: number;
   NewDeaths: number;
   TotalDeaths: number;
   NewRecovered: number;
   TotalRecovered: number;
-};
+}
 
-export type CountryCovidData = {
+export interface CountryCovidData extends GlobalCovidData {
   Country: string;
   CountryCode: string;
   Slug: string;
-  NewConfirmed: number;
-  TotalConfirmed: number;
-  NewDeaths: number;
-  TotalDeaths: number;
-  NewRecovered: number;
-  TotalRecovered: number;
   Date: Date;
-};
+}
 
-type Summary = {
+interface Summary {
   Global: GlobalCovidData;
   Countries: CountryCovidData[];
   Date: Date;
-};
+}
 
 type Field =
   | 'NewDeaths'
