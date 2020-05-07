@@ -4,6 +4,7 @@ import mqtt, {
   OnErrorCallback,
   OnPacketCallback,
 } from 'mqtt';
+import { getCountrySummary, getField, CountryCovidData } from './api';
 
 const PROTOCOL = 'mqtt';
 const SERVER_URL = '127.0.0.1';
@@ -12,10 +13,13 @@ const MQTT_URI = `${PROTOCOL}://${SERVER_URL}:${PORT}`;
 const client = mqtt.connect(MQTT_URI);
 
 const loop = async () => {
-  client.publish('/all', '10,1,9', { qos: 2 });
-  client.publish('/confirmed', '10');
-  client.publish('/dead', '1');
-  client.publish('/recovered', '9');
+  const country = (await getCountrySummary('indonesia')) as CountryCovidData;
+  const confirmed = getField(country, 'TotalConfirmed');
+  const deaths = getField(country, 'TotalDeaths');
+  const recovered = getField(country, 'TotalRecovered');
+  client.publish('/confirmed', confirmed);
+  client.publish('/deaths', deaths);
+  client.publish('/recovered', recovered);
 };
 
 const handleConnect: Function = () => {

@@ -13,7 +13,9 @@ const client = mqtt.connect(MQTT_URI);
 
 const handleConnect: Function = () => {
   console.log(`Connected to ${MQTT_URI}`);
-  client.subscribe('/all', { qos: 2 });
+  client.subscribe('/confirmed');
+  client.subscribe('/deaths');
+  client.subscribe('/recovered');
 };
 
 const handleMessage: OnMessageCallback = (
