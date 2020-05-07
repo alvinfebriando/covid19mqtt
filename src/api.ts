@@ -2,7 +2,7 @@ import got from 'got';
 
 const API_URL = 'https://api.covid19api.com/';
 
-type GlobalCovidData = {
+export type GlobalCovidData = {
   NewConfirmed: number;
   TotalConfirmed: number;
   NewDeaths: number;
@@ -11,7 +11,7 @@ type GlobalCovidData = {
   TotalRecovered: number;
 };
 
-type CountryCovidData = {
+export type CountryCovidData = {
   Country: string;
   CountryCode: string;
   Slug: string;
@@ -30,6 +30,14 @@ type Summary = {
   Date: Date;
 };
 
+type Field =
+  | 'NewDeaths'
+  | 'TotalDeaths'
+  | 'NewConfirmed'
+  | 'TotalConfirmed'
+  | 'NewRecovered'
+  | 'TotalRecovered';
+
 const getSummary = async (): Promise<Summary> => {
   const response = await got.get(API_URL + 'summary');
   return JSON.parse(response.body);
@@ -46,4 +54,11 @@ export const getCountrySummary = async (slug: string) => {
   return countries.find(country => {
     return country.Slug === slug;
   });
+};
+
+export const getField = (
+  country: CountryCovidData | GlobalCovidData,
+  field: Field
+) => {
+  return country[field];
 };
