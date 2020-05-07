@@ -1,5 +1,6 @@
 import inquirer from 'inquirer';
 import { getCountriesName, getCountriesSlug } from './data';
+import { Subscriber } from './subscriber';
 
 const start = async () => {
   const answer1 = await inquirer.prompt([
@@ -19,6 +20,8 @@ const start = async () => {
 
   if (answer1.scope === 'Global') {
     console.log(`Field: ${answer1.field}, Scope: ${answer1.scope}`);
+    const mqttClient = new Subscriber();
+    mqttClient.subscribe(`${answer1.field}/${answer1.scope}`);
   } else {
     const answer2 = await inquirer.prompt([
       {
