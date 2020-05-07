@@ -1,20 +1,11 @@
 import inquirer from 'inquirer';
-import { getCountriesName, getCountriesSlug } from './data';
+import {
+  getCountriesName,
+  getCountriesSlug,
+  scopeChoices,
+  fieldChoices,
+} from './data';
 import { Subscriber } from './subscriber';
-
-enum fieldChoices {
-  TotalConfirmed = 'Total Infeksi',
-  NewConfirmed = 'Infeksi Hari Ini',
-  TotalDeaths = 'Total Meninggal',
-  NewDeaths = 'Meninggal Hari Ini',
-  TotalRecovered = 'Total Sembuh',
-  NewRecovered = 'Sembuh Hari Ini',
-}
-
-enum scopeChoices {
-  Global = 'Global',
-  Country = 'Negara',
-}
 
 const start = async () => {
   const mqttClient = new Subscriber();

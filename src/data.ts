@@ -9,6 +9,20 @@ interface Country {
   ISO2: string;
 }
 
+export enum fieldChoices {
+  TotalConfirmed = 'Total Infeksi',
+  NewConfirmed = 'Infeksi Hari Ini',
+  TotalDeaths = 'Total Meninggal',
+  NewDeaths = 'Meninggal Hari Ini',
+  TotalRecovered = 'Total Sembuh',
+  NewRecovered = 'Sembuh Hari Ini',
+}
+
+export enum scopeChoices {
+  Global = 'Global',
+  Country = 'Negara',
+}
+
 export const getCountries = async () => {
   return <Country[]>JSON.parse(
     await readFile(`${__dirname}/../data/countries.json`, {
