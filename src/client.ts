@@ -17,6 +17,8 @@ enum scopeChoices {
 }
 
 const start = async () => {
+  const mqttClient = new Subscriber();
+
   const answer1 = await inquirer.prompt([
     {
       name: 'field',
@@ -33,9 +35,11 @@ const start = async () => {
   ]);
 
   if (answer1.scope === 'Global') {
-    console.log(`Field: ${answer1.field}, Scope: ${answer1.scope}`);
-    const mqttClient = new Subscriber();
-    mqttClient.subscribe(`${answer1.field}/${answer1.scope}`);
+    Object.entries(fieldChoices).forEach(field => {
+      if (field[1] === answer1.field) {
+        mqttClient.subscribe(`Global/${field[0]}`);
+      }
+    });
   } else {
     const answer2 = await inquirer.prompt([
       {
@@ -46,7 +50,11 @@ const start = async () => {
       },
     ]);
     const slug = await getCountriesSlug(answer2.country);
-    console.log(`Field: ${answer1.field}, Scope: ${slug}`);
+    Object.entries(fieldChoices).forEach(field => {
+      if (field[1] === answer1.field) {
+        mqttClient.subscribe(`Country/${slug}/${field[0]}`);
+      }
+    });
   }
 };
 
