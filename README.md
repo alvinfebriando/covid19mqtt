@@ -11,3 +11,12 @@ node build/subscriber
 node build/publisher
 # run subscriber and publisher alongside with server
 ```
+## EZ way
+```bash
+npm install
+npx tsc
+npx concurrently "tsc -w" "nodemon build/server" "nodemon build/publisher"
+
+# in another terminal
+node build/client
+```
