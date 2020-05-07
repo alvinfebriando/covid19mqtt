@@ -4,7 +4,8 @@ import mqtt, {
   OnErrorCallback,
   OnPacketCallback,
 } from 'mqtt';
-import { getCountrySummary, getField, CountryCovidData } from './api';
+import { getGlobalSummary, getCountrySummary, CountryCovidData } from './api';
+import { fieldChoices, getCountriesName, getCountriesSlug } from './data';
 
 const PROTOCOL = 'mqtt';
 const SERVER_URL = '127.0.0.1';
@@ -13,18 +14,27 @@ const MQTT_URI = `${PROTOCOL}://${SERVER_URL}:${PORT}`;
 const client = mqtt.connect(MQTT_URI);
 
 const loop = async () => {
-  const country = (await getCountrySummary('indonesia')) as CountryCovidData;
-  const confirmed = getField(country, 'TotalConfirmed');
-  const deaths = getField(country, 'TotalDeaths');
-  const recovered = getField(country, 'TotalRecovered');
-  client.publish('/confirmed', confirmed);
-  client.publish('/deaths', deaths);
-  client.publish('/recovered', recovered);
+  const global: { [index: string]: any } = await getGlobalSummary();
+  const countryNames = await getCountriesName();
+  const countrySlugs: string[] = [];
+  for (const name of countryNames) {
+    countrySlugs.push(<string>await getCountriesSlug(name));
+  }
+
+  for (const field of Object.keys(fieldChoices)) {
+    client.publish(`Global/${field}`, global[field].toString());
+    for (const slug of countrySlugs) {
+      const countryData: { [index: string]: any } = <CountryCovidData>(
+        await getCountrySummary(slug)
+      );
+      client.publish(`Country/${slug}/${field}`, countryData[field].toString());
+    }
+  }
 };
 
 const handleConnect: Function = () => {
   console.log(`Connected to ${MQTT_URI}`);
-  setInterval(loop, 1000);
+  setInterval(loop, 5000);
 };
 
 const handleMessage: OnMessageCallback = (
