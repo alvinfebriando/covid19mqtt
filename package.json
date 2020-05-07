@@ -6,8 +6,8 @@
   "author": "Alvin Febriando <alvinfebriando@outlook.com>",
   "license": "MIT",
   "scripts": {
-    "start:dev": "concurrently 'tsc -w' 'nodemon build/server'",
-    "start": "tsc && node build/server"
+    "start:dev": "npx concurrently 'npx tsc -w' 'npx nodemon build/server'",
+    "start": "npx tsc && node build/server"
   },
   "devDependencies": {
     "@types/node": "^13.13.5",
