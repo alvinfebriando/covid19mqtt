@@ -6,14 +6,16 @@ const PORT = 1883;
 const MQTT_URI = `${PROTOCOL}://${SERVER_URL}:${PORT}`;
 const client = mqtt.connect(MQTT_URI);
 
+const loop = async () => {
+  client.publish('/all', '10,1,9', { qos: 2 });
+  client.publish('/confirmed', '10');
+  client.publish('/dead', '1');
+  client.publish('/recovered', '9');
+};
+
 const handleConnect: Function = () => {
   console.log(`Connected to ${MQTT_URI}`);
-  setInterval(() => {
-    client.publish('/all', '10,1,9');
-    client.publish('/confirmed', '10');
-    client.publish('/dead', '1');
-    client.publish('/recovered', '9');
-  }, 1000);
+  setInterval(loop, 1000);
 };
 
 const handleMessage: OnMessageCallback = (
