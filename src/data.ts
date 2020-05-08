@@ -11,11 +11,8 @@ interface Country {
 
 export enum fieldChoices {
   TotalConfirmed = 'Total Infeksi',
-  NewConfirmed = 'Infeksi Hari Ini',
   TotalDeaths = 'Total Meninggal',
-  NewDeaths = 'Meninggal Hari Ini',
   TotalRecovered = 'Total Sembuh',
-  NewRecovered = 'Sembuh Hari Ini',
 }
 
 export enum scopeChoices {
