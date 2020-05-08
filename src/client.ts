@@ -1,4 +1,4 @@
-import inquirer from 'inquirer';
+import { prompt } from 'enquirer';
 import {
   getCountriesName,
   getCountriesSlug,
@@ -8,41 +8,36 @@ import {
 import { Subscriber } from './subscriber';
 
 const start = async () => {
-  const mqttClient = new Subscriber();
-
-  const answer1 = await inquirer.prompt([
-    {
-      name: 'field',
-      message: 'Informasi apa yang anda cari',
-      type: 'list',
-      choices: Object.values(fieldChoices),
-    },
-    {
-      name: 'scope',
-      message: 'Pilih global atau negara?',
-      type: 'list',
-      choices: Object.values(scopeChoices),
-    },
-  ]);
-
-  if (answer1.scope === 'Global') {
+  const fieldAnswer: { field: string } = await prompt({
+    type: 'select',
+    name: 'field',
+    message: 'Informasi apa yang anda butuhkan?',
+    choices: Object.values(fieldChoices),
+  });
+  const scopeAnswer: { scope: string } = await prompt({
+    type: 'select',
+    name: 'scope',
+    message: 'Pilih global atau negara',
+    choices: Object.values(scopeChoices),
+  });
+  if (scopeAnswer.scope === 'Global') {
+    const mqttClient = new Subscriber();
     Object.entries(fieldChoices).forEach(field => {
-      if (field[1] === answer1.field) {
+      if (field[1] === fieldAnswer.field) {
         mqttClient.subscribe(`Global/${field[0]}`);
       }
     });
-  } else {
-    const answer2 = await inquirer.prompt([
-      {
-        name: 'country',
-        message: 'Pilih satu negara',
-        type: 'list',
-        choices: await getCountriesName(),
-      },
-    ]);
-    const slug = await getCountriesSlug(answer2.country);
+  } else if (scopeAnswer.scope === 'Negara') {
+    const countryAnswer: { country: string } = await prompt({
+      type: 'autocomplete',
+      name: 'country',
+      message: 'Pilih satu negara',
+      choices: await getCountriesName(),
+    });
+    const slug = await getCountriesSlug(countryAnswer.country);
+    const mqttClient = new Subscriber();
     Object.entries(fieldChoices).forEach(field => {
-      if (field[1] === answer1.field) {
+      if (field[1] === fieldAnswer.field) {
         mqttClient.subscribe(`Country/${slug}/${field[0]}`);
       }
     });
