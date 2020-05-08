@@ -1,4 +1,11 @@
-import mqtt, { OnMessageCallback, Packet, OnErrorCallback } from 'mqtt';
+import mqtt, {
+  OnMessageCallback,
+  Packet,
+  OnErrorCallback,
+  OnPacketCallback,
+} from 'mqtt';
+import { getGlobalSummary, getCountrySummary, CountryCovidData } from './api';
+import { fieldChoices, getCountriesName, getCountriesSlug } from './data';
 
 const PROTOCOL = 'mqtt';
 const SERVER_URL = '127.0.0.1';
@@ -6,11 +13,28 @@ const PORT = 1883;
 const MQTT_URI = `${PROTOCOL}://${SERVER_URL}:${PORT}`;
 const client = mqtt.connect(MQTT_URI);
 
+const loop = async () => {
+  const global: { [index: string]: any } = await getGlobalSummary();
+  const countryNames = await getCountriesName();
+  const countrySlugs: string[] = [];
+  for (const name of countryNames) {
+    countrySlugs.push(<string>await getCountriesSlug(name));
+  }
+
+  for (const field of Object.keys(fieldChoices)) {
+    client.publish(`Global/${field}`, global[field].toString());
+    for (const slug of countrySlugs) {
+      const countryData: { [index: string]: any } = <CountryCovidData>(
+        await getCountrySummary(slug)
+      );
+      client.publish(`Country/${slug}/${field}`, countryData[field].toString());
+    }
+  }
+};
+
 const handleConnect: Function = () => {
   console.log(`Connected to ${MQTT_URI}`);
-  client.subscribe(['all', 'confirmed', 'death', 'recovered'], () => {
-    console.log(`Subscribed}`);
-  });
+  setInterval(loop, 5000);
 };
 
 const handleMessage: OnMessageCallback = (
@@ -23,6 +47,19 @@ const handleMessage: OnMessageCallback = (
 
 const handleError: OnErrorCallback = (err: Error) => {
   console.log(err);
+};
+
+const handlePacketReceive: OnPacketCallback = packet => {
+  console.log(`Receive: ${packet.cmd}`);
+};
+
+const handlePacketSend: OnPacketCallback = packet => {
+  console.log(`Send: ${packet.cmd}`);
+};
+
+const debug = () => {
+  client.on('packetreceive', handlePacketReceive);
+  client.on('packetsend', handlePacketSend);
 };
 
 client.on('connect', handleConnect);
