@@ -13,7 +13,6 @@ node build/publisher
 ```
 ## EZ way
 ```bash
-git checkout inquirer
 npm install
 npx tsc
 npx concurrently "tsc -w" "nodemon build/server" "nodemon build/publisher"
