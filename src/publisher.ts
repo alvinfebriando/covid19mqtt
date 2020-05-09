@@ -11,7 +11,7 @@ const PROTOCOL = 'mqtt';
 const SERVER_URL = '127.0.0.1';
 const PORT = 1883;
 const MQTT_URI = `${PROTOCOL}://${SERVER_URL}:${PORT}`;
-const client = mqtt.connect(MQTT_URI);
+const client = mqtt.connect(MQTT_URI, { clientId: 'Publisher' });
 
 const loop = async () => {
   const global: { [index: string]: any } = await getGlobalSummary();
