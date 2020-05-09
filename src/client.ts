@@ -6,8 +6,9 @@ import {
   fieldChoices,
 } from './data';
 import { Subscriber } from './subscriber';
+import emitter from './event';
 
-const start = async () => {
+const loop = async (mqttClient: Subscriber) => {
   const fieldAnswer: { field: string } = await prompt({
     type: 'select',
     name: 'field',
@@ -21,7 +22,6 @@ const start = async () => {
     choices: Object.values(scopeChoices),
   });
   if (scopeAnswer.scope === 'Global') {
-    const mqttClient = new Subscriber();
     Object.entries(fieldChoices).forEach(field => {
       if (field[1] === fieldAnswer.field) {
         mqttClient.subscribe(`Global/${field[0]}`);
@@ -35,7 +35,6 @@ const start = async () => {
       choices: await getCountriesName(),
     });
     const slug = await getCountriesSlug(countryAnswer.country);
-    const mqttClient = new Subscriber();
     Object.entries(fieldChoices).forEach(field => {
       if (field[1] === fieldAnswer.field) {
         mqttClient.subscribe(`Country/${slug}/${field[0]}`);
@@ -44,4 +43,27 @@ const start = async () => {
   }
 };
 
+const start = async () => {
+  const mqttClient = new Subscriber();
+  emitter.once('connect', () => {
+    loop(mqttClient);
+  });
+  emitter.on('done', async () => {
+    const loopAnswer: { loop: string } = await prompt({
+      type: 'confirm',
+      name: 'loop',
+      message: 'Jalankan lagi?',
+    });
+    if (loopAnswer.loop) {
+      loop(mqttClient);
+    } else {
+      process.exit();
+    }
+  });
+};
+
 start();
+
+process.on('unhandledRejection', err => {
+  console.log(err);
+});

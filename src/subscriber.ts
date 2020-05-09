@@ -5,6 +5,7 @@ import mqtt, {
   OnPacketCallback,
   MqttClient,
 } from 'mqtt';
+import emitter from './event';
 
 const PROTOCOL = 'mqtt';
 const SERVER_URL = '127.0.0.1';
@@ -15,6 +16,7 @@ export class Subscriber {
   client: MqttClient;
   constructor() {
     this.client = mqtt.connect(MQTT_URI, { clientId: 'Subscriber' });
+    this.client.on('connect', this.handleConnect);
     this.client.on('message', this.handleMessage);
     this.client.on('error', this.handleError);
   }
@@ -24,7 +26,7 @@ export class Subscriber {
   }
 
   private handleConnect: Function = () => {
-    console.log(`Connected to ${MQTT_URI}`);
+    emitter.emit('connect');
   };
 
   private handleMessage: OnMessageCallback = (
@@ -33,7 +35,8 @@ export class Subscriber {
     packet: Packet
   ) => {
     console.log(payload.toString());
-    process.exit();
+    this.client.unsubscribe(topic);
+    emitter.emit('done');
   };
 
   private handleError: OnErrorCallback = (err: Error) => {
