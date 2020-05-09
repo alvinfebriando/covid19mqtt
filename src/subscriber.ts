@@ -14,7 +14,7 @@ const MQTT_URI = `${PROTOCOL}://${SERVER_URL}:${PORT}`;
 export class Subscriber {
   client: MqttClient;
   constructor() {
-    this.client = mqtt.connect(MQTT_URI);
+    this.client = mqtt.connect(MQTT_URI, { clientId: 'Subscriber' });
     this.client.on('message', this.handleMessage);
     this.client.on('error', this.handleError);
   }
