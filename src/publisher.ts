@@ -38,6 +38,8 @@ const loop = async () => {
           `Country/${slug}/${field}`,
           countryData[field].toString()
         );
+      } else {
+        client.publish(`Country/${slug}/${field}`, 'Data tidak tersedia');
       }
     }
   }
