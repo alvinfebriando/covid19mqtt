@@ -14,17 +14,25 @@ const MQTT_URI = `${PROTOCOL}://${SERVER_URL}:${PORT}`;
 const client = mqtt.connect(MQTT_URI, { clientId: 'Publisher' });
 
 const loop = async () => {
+  // Ambil data yang dibutuhkan
   const global = await getGlobalSummary();
   const countryNames = await getCountriesName();
+
   const countrySlugs: string[] = [];
   for (const name of countryNames) {
     countrySlugs.push(<string>await getCountriesSlug(name));
   }
 
+  // Untuk setiap field yang ada (total infeksi, total meninggal, dll)
   for (const field of Object.keys(fieldChoices)) {
+    // Publish data sesuai field
     client.publish(`Global/${field}`, global[field].toString());
+
+    // Untuk setiap negara yang ada
     for (const slug of countrySlugs) {
+      // ambil data negara
       const countryData = await getCountrySummary(slug);
+      // publish ke topic yang sesuai jika data negara tersebut tersedia
       if (countryData) {
         client.publish(
           `Country/${slug}/${field}`,
@@ -37,6 +45,7 @@ const loop = async () => {
 
 const handleConnect: Function = () => {
   console.log(`Connected to ${MQTT_URI}`);
+  // Publish setiap 5 detik
   setInterval(loop, 5000);
 };
 

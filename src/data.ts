@@ -23,6 +23,7 @@ export enum scopeChoices {
   Country = 'Negara',
 }
 
+// baca isi file countries yang didapat dari covid19api.com
 export const getCountries = async () => {
   return <Country[]>JSON.parse(
     await readFile(`${__dirname}/../data/countries.json`, {

@@ -8,6 +8,7 @@ import {
 import { Subscriber } from './subscriber';
 import emitter from './event';
 
+// Pertanyaan
 const fieldQuestion = async () => {
   return <{ field: string }>await prompt({
     type: 'select',
@@ -47,6 +48,7 @@ const loop = async (mqttClient: Subscriber) => {
   const fieldAnswer = await fieldQuestion();
   const scopeAnswer = await scopeQuestion();
   if (scopeAnswer.scope === 'Global') {
+    // Subscribe ke topic sesuai dengan jawaban user
     Object.entries(fieldChoices).forEach(field => {
       if (field[1] === fieldAnswer.field) {
         mqttClient.subscribe(`Global/${field[0]}`);
@@ -55,6 +57,7 @@ const loop = async (mqttClient: Subscriber) => {
   } else if (scopeAnswer.scope === 'Negara') {
     const countryAnswer = await answerQuestion();
     const slug = await getCountriesSlug(countryAnswer.country);
+    // Subscribe ke topic sesuai dengan jawaban user
     Object.entries(fieldChoices).forEach(field => {
       if (field[1] === fieldAnswer.field) {
         mqttClient.subscribe(`Country/${slug}/${field[0]}`);
@@ -64,12 +67,18 @@ const loop = async (mqttClient: Subscriber) => {
 };
 
 const start = async () => {
+  // Inisiasi subscriber
   const mqttClient = new Subscriber();
+  // Ketika terhubung dengan server berikan pertanyaan
   emitter.once('connect', () => {
     loop(mqttClient);
   });
+
+  // Ketika subscriber menerima pesan (on message) akan
+  // memberitahu client bahwa pesan sudah diterima (emit done)
   emitter.on('done', async () => {
     const loopAnswer = await loopQuestion();
+    // Ulangi pertanyaan jika user mau
     if (loopAnswer.loop) {
       loop(mqttClient);
     } else {

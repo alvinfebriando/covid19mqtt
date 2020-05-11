@@ -35,6 +35,7 @@ type Field =
   | 'NewRecovered'
   | 'TotalRecovered';
 
+// Mengambil data summary dari api
 const getSummary = async (): Promise<Summary> => {
   const response = await got.get(API_URL + 'summary');
   summary = JSON.parse(response.body);

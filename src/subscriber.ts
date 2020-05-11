@@ -26,6 +26,8 @@ export class Subscriber {
   }
 
   private handleConnect: Function = () => {
+    // Ketika sudah terhubung dengan server, kirim pesan kepada client (cli)
+    // Untuk kemudian menampilkan pertanyaan
     emitter.emit('connect');
   };
 
@@ -35,6 +37,8 @@ export class Subscriber {
     packet: Packet
   ) => {
     console.log(payload.toString());
+    // Ketika sudah menerima pesan akan langsung unsubscribe topic tersebut
+    // dan memberitahu client (cli)
     this.client.unsubscribe(topic);
     emitter.emit('done');
   };
