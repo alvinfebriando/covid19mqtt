@@ -9,6 +9,7 @@ export interface GlobalCovidData {
   TotalDeaths: number;
   NewRecovered: number;
   TotalRecovered: number;
+  [index: string]: any;
 }
 
 export interface CountryCovidData extends GlobalCovidData {

@@ -4,7 +4,7 @@ import mqtt, {
   OnErrorCallback,
   OnPacketCallback,
 } from 'mqtt';
-import { getGlobalSummary, getCountrySummary, CountryCovidData } from './api';
+import { getGlobalSummary, getCountrySummary } from './api';
 import { fieldChoices, getCountriesName, getCountriesSlug } from './data';
 
 const PROTOCOL = 'mqtt';
@@ -14,7 +14,7 @@ const MQTT_URI = `${PROTOCOL}://${SERVER_URL}:${PORT}`;
 const client = mqtt.connect(MQTT_URI, { clientId: 'Publisher' });
 
 const loop = async () => {
-  const global: { [index: string]: any } = await getGlobalSummary();
+  const global = await getGlobalSummary();
   const countryNames = await getCountriesName();
   const countrySlugs: string[] = [];
   for (const name of countryNames) {
@@ -24,10 +24,13 @@ const loop = async () => {
   for (const field of Object.keys(fieldChoices)) {
     client.publish(`Global/${field}`, global[field].toString());
     for (const slug of countrySlugs) {
-      const countryData: { [index: string]: any } = <CountryCovidData>(
-        await getCountrySummary(slug)
-      );
-      client.publish(`Country/${slug}/${field}`, countryData[field].toString());
+      const countryData = await getCountrySummary(slug);
+      if (countryData) {
+        client.publish(
+          `Country/${slug}/${field}`,
+          countryData[field].toString()
+        );
+      }
     }
   }
 };
