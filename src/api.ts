@@ -27,6 +27,8 @@ interface Summary {
 
 let summary: Summary;
 
+let lastAPICall: Date;
+
 type Field =
   | 'NewDeaths'
   | 'TotalDeaths'
@@ -35,10 +37,23 @@ type Field =
   | 'NewRecovered'
   | 'TotalRecovered';
 
+// Ubah dari menit ke ms
+const MINUTE = 60000;
+
 // Mengambil data summary dari api
 const getSummary = async (): Promise<Summary> => {
-  const response = await got.get(API_URL + 'summary');
-  summary = JSON.parse(response.body);
+  const now = new Date();
+  if (lastAPICall !== undefined) {
+    if (now.valueOf() - lastAPICall.valueOf() >= 10 * MINUTE) {
+      const response = await got.get(API_URL + 'summary');
+      lastAPICall = new Date();
+      summary = JSON.parse(response.body);
+    }
+  } else {
+    const response = await got.get(API_URL + 'summary');
+    lastAPICall = new Date();
+    summary = JSON.parse(response.body);
+  }
   return summary;
 };
 
