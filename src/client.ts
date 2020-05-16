@@ -5,8 +5,7 @@ import {
   scopeChoices,
   fieldChoices,
 } from './data';
-import { Subscriber } from './subscriber';
-import emitter from './event';
+import { Subscriber, emitter } from './subscriber';
 
 // Pertanyaan
 const fieldQuestion = async () => {

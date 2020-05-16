@@ -1,3 +1,4 @@
+import { EventEmitter } from 'events';
 import mqtt, {
   OnMessageCallback,
   Packet,
@@ -5,7 +6,8 @@ import mqtt, {
   OnPacketCallback,
   MqttClient,
 } from 'mqtt';
-import emitter from './event';
+
+export const emitter = new EventEmitter();
 
 const PROTOCOL = 'mqtt';
 const SERVER_URL = '127.0.0.1';
