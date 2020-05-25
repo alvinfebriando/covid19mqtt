@@ -1,13 +1,8 @@
 import fs from 'fs';
 import { promisify } from 'util';
+import { Country } from './interfaces';
 
 const readFile = promisify(fs.readFile);
-
-interface Country {
-  Country: string;
-  Slug: string;
-  ISO2: string;
-}
 
 export enum fieldChoices {
   TotalConfirmed = 'Total Infeksi',
