@@ -4,8 +4,13 @@ import mqtt, {
   OnErrorCallback,
   OnPacketCallback,
 } from 'mqtt';
-import { getGlobalSummary, getCountrySummary } from './api';
-import { fieldChoices, getCountriesName, getCountriesSlug } from './data';
+import {
+  getGlobalSummary,
+  getCountrySummary,
+  getCountriesName,
+  getCountriesSlug,
+} from './api';
+import { fieldChoices } from './data';
 
 const PROTOCOL = 'mqtt';
 const SERVER_URL = '127.0.0.1';

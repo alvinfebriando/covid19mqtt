@@ -1,4 +1,4 @@
-import { getCountriesSlug, fieldChoices } from './data';
+import { fieldChoices } from './data';
 import { Subscriber, emitter } from './subscriber';
 import {
   answerQuestion,
@@ -6,6 +6,7 @@ import {
   loopQuestion,
   scopeQuestion,
 } from './questions';
+import { getCountriesSlug } from './api';
 
 const loop = async (mqttClient: Subscriber) => {
   const fieldAnswer = await fieldQuestion();

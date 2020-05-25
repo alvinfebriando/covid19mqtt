@@ -1,5 +1,6 @@
 import { prompt } from 'enquirer';
-import { getCountriesName, scopeChoices, fieldChoices } from './data';
+import { scopeChoices, fieldChoices } from './data';
+import { getCountriesName } from './api';
 
 // Pertanyaan
 export const fieldQuestion = async () => {

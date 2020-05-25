@@ -1,5 +1,10 @@
 import got from 'got';
-import { Summary, CountryCovidData, GlobalCovidData } from './interfaces';
+import {
+  Summary,
+  CountryCovidData,
+  GlobalCovidData,
+  Country,
+} from './interfaces';
 
 const API_URL = 'https://api.covid19api.com/';
 
@@ -52,4 +57,22 @@ export const getField = (
   field: Field
 ) => {
   return country[field].toString();
+};
+
+// baca isi file countries yang didapat dari covid19api.com
+export const getCountries = async () => {
+  const response = await got.get(API_URL + 'countries');
+  return <Country[]>JSON.parse(response.body);
+};
+
+export const getCountriesName = async () => {
+  const countries = await getCountries();
+  return countries
+    .map(country => country.Country)
+    .sort((a, b) => a.localeCompare(b));
+};
+
+export const getCountriesSlug = async (name: string) => {
+  const countries = await getCountries();
+  return countries.find(country => country.Country === name)?.Slug;
 };
