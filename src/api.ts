@@ -10,6 +10,7 @@ const API_URL = 'https://api.covid19api.com/';
 
 let summary: Summary;
 let lastAPICall: Date;
+let countriesData: Country[];
 
 type Field =
   | 'NewDeaths'
@@ -61,8 +62,13 @@ export const getField = (
 
 // baca isi file countries yang didapat dari covid19api.com
 export const getCountries = async () => {
-  const response = await got.get(API_URL + 'countries');
-  return <Country[]>JSON.parse(response.body);
+  if (!countriesData) {
+    const response = await got.get(API_URL + 'countries');
+    countriesData = <Country[]>JSON.parse(response.body);
+    return countriesData;
+  } else {
+    return countriesData;
+  }
 };
 
 export const getCountriesName = async () => {
