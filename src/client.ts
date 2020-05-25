@@ -1,47 +1,11 @@
-import { prompt } from 'enquirer';
-import {
-  getCountriesName,
-  getCountriesSlug,
-  scopeChoices,
-  fieldChoices,
-} from './data';
+import { getCountriesSlug, fieldChoices } from './data';
 import { Subscriber, emitter } from './subscriber';
-
-// Pertanyaan
-const fieldQuestion = async () => {
-  return <{ field: string }>await prompt({
-    type: 'select',
-    name: 'field',
-    message: 'Informasi apa yang anda butuhkan?',
-    choices: Object.values(fieldChoices),
-  });
-};
-
-const scopeQuestion = async () => {
-  return <{ scope: string }>await prompt({
-    type: 'select',
-    name: 'scope',
-    message: 'Pilih global atau negara',
-    choices: Object.values(scopeChoices),
-  });
-};
-
-const answerQuestion = async () => {
-  return <{ country: string }>await prompt({
-    type: 'autocomplete',
-    name: 'country',
-    message: 'Pilih satu negara',
-    choices: await getCountriesName(),
-  });
-};
-
-const loopQuestion = async () => {
-  return <{ loop: string }>await prompt({
-    type: 'confirm',
-    name: 'loop',
-    message: 'Jalankan lagi?',
-  });
-};
+import {
+  answerQuestion,
+  fieldQuestion,
+  loopQuestion,
+  scopeQuestion,
+} from './questions';
 
 const loop = async (mqttClient: Subscriber) => {
   const fieldAnswer = await fieldQuestion();
