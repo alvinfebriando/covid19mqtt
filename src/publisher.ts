@@ -10,7 +10,7 @@ import {
   getCountriesName,
   getCountriesSlug,
 } from './api';
-import { fieldChoices } from './data';
+import { fieldChoices } from './choices';
 
 const PROTOCOL = 'mqtt';
 const SERVER_URL = '127.0.0.1';

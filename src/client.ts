@@ -1,4 +1,4 @@
-import { fieldChoices } from './data';
+import { fieldChoices } from './choices';
 import { Subscriber, emitter } from './subscriber';
 import {
   answerQuestion,

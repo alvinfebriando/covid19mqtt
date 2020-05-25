@@ -1,5 +1,5 @@
 import { prompt } from 'enquirer';
-import { scopeChoices, fieldChoices } from './data';
+import { scopeChoices, fieldChoices } from './choices';
 import { getCountriesName } from './api';
 
 // Pertanyaan
