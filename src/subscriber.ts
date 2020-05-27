@@ -27,6 +27,10 @@ export class Subscriber {
     this.client.subscribe(topic);
   }
 
+  publish(topic: string, data: string) {
+    this.client.publish(topic, data);
+  }
+
   private handleConnect: Function = () => {
     // Ketika sudah terhubung dengan server, kirim pesan kepada client (cli)
     // Untuk kemudian menampilkan pertanyaan

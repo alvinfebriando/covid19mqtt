@@ -15,6 +15,11 @@ const loop = async (mqttClient: Subscriber) => {
     // Subscribe ke topic sesuai dengan jawaban user
     Object.entries(fieldChoices).forEach(field => {
       if (field[1] === fieldAnswer.field) {
+        // mqttClient.subscribe(`Global/${field[0]}`);
+        mqttClient.publish(
+          '/request',
+          JSON.stringify({ topic: `Global/${field[0]}` })
+        );
         mqttClient.subscribe(`Global/${field[0]}`);
       }
     });
@@ -24,6 +29,10 @@ const loop = async (mqttClient: Subscriber) => {
     // Subscribe ke topic sesuai dengan jawaban user
     Object.entries(fieldChoices).forEach(field => {
       if (field[1] === fieldAnswer.field) {
+        mqttClient.publish(
+          '/request',
+          JSON.stringify({ topic: `Country/${slug}/${field[0]}` })
+        );
         mqttClient.subscribe(`Country/${slug}/${field[0]}`);
       }
     });
