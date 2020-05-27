@@ -52,8 +52,9 @@ const loop = async () => {
 
 const handleConnect: Function = () => {
   console.log(`Connected to ${MQTT_URI}`);
+  client.subscribe('/request');
   // Publish setiap 5 detik
-  setInterval(loop, 5000);
+  // setInterval(loop, 5000);
 };
 
 const handleMessage: OnMessageCallback = (
@@ -61,7 +62,21 @@ const handleMessage: OnMessageCallback = (
   payload: Buffer,
   packet: Packet
 ) => {
-  console.log(payload.toString());
+  let scope: string;
+  let field: string;
+  let country: string;
+  if (topic === '/request') {
+    const { topic } = <{ topic: string }>JSON.parse(payload.toString());
+    scope = topic.split('/')[0];
+    if (topic.startsWith('Global')) {
+      field = topic.split('/')[1];
+      console.log(scope, field);
+    } else {
+      country = topic.split('/')[1];
+      field = topic.split('/')[2];
+      console.log(scope, field, country);
+    }
+  }
 };
 
 const handleError: OnErrorCallback = (err: Error) => {
