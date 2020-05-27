@@ -24,7 +24,7 @@ type Field =
 const MINUTE = 60000;
 
 // Mengambil data summary dari api
-const getSummary = async (): Promise<Summary> => {
+const getSummary = async (): Promise<void> => {
   const now = new Date();
   if (lastAPICall !== undefined) {
     if (now.valueOf() - lastAPICall.valueOf() >= 10 * MINUTE) {
@@ -37,17 +37,16 @@ const getSummary = async (): Promise<Summary> => {
     lastAPICall = new Date();
     summary = JSON.parse(response.body);
   }
-  return summary;
 };
 
 export const getGlobalSummary = async () => {
-  const summary = await getSummary();
+  await getSummary();
   return summary.Global;
 };
 
 export const getCountrySummary = async (slug: string) => {
   let countries: CountryCovidData[];
-  const summary = await getSummary();
+  await getSummary();
   countries = summary.Countries;
   return countries.find(country => {
     return country.Slug === slug;
@@ -63,7 +62,7 @@ export const getField = (
 
 // baca isi file countries yang didapat dari covid19api.com
 export const getCountries = async () => {
-  const summary = await getSummary();
+  await getSummary();
   const countriesData = <Country[]>summary.Countries.map(country => {
     return {
       Country: country.Country,
