@@ -47,6 +47,7 @@ export const getGlobalSummary = async () => {
 
 export const getCountrySummary = async (slug: string) => {
   let countries: CountryCovidData[];
+  const summary = await getSummary();
   countries = summary.Countries;
   return countries.find(country => {
     return country.Slug === slug;
