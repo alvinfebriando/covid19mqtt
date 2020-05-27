@@ -63,13 +63,14 @@ export const getField = (
 
 // baca isi file countries yang didapat dari covid19api.com
 export const getCountries = async () => {
-  if (!countriesData) {
-    const response = await got.get(API_URL + 'countries');
-    countriesData = <Country[]>JSON.parse(response.body);
-    return countriesData;
-  } else {
-    return countriesData;
-  }
+  const summary = await getSummary();
+  const countriesData = <Country[]>summary.Countries.map(country => {
+    return {
+      Country: country.Country,
+      Slug: country.Slug,
+    };
+  });
+  return countriesData;
 };
 
 export const getCountriesName = async () => {
