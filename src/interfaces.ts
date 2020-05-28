@@ -41,3 +41,14 @@ export interface DayOne {
   Date: Date;
   [index: string]: any;
 }
+
+export interface FieldAnswer {
+  field: string;
+}
+
+export interface ScopeAnswer {
+  scope: string;
+}
+export interface CountryAnswer {
+  country: string;
+}

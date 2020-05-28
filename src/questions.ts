@@ -1,10 +1,11 @@
 import { prompt } from 'enquirer';
 import { scopeChoices, fieldChoices } from './choices';
 import { getCountriesName } from './api';
+import { FieldAnswer, ScopeAnswer, CountryAnswer } from './interfaces';
 
 // Pertanyaan
 export const fieldQuestion = async () => {
-  return <{ field: string }>await prompt({
+  return <FieldAnswer>await prompt({
     type: 'select',
     name: 'field',
     message: 'Informasi apa yang anda butuhkan?',
@@ -13,7 +14,7 @@ export const fieldQuestion = async () => {
 };
 
 export const scopeQuestion = async () => {
-  return <{ scope: string }>await prompt({
+  return <ScopeAnswer>await prompt({
     type: 'select',
     name: 'scope',
     message: 'Pilih global atau negara',
@@ -22,7 +23,7 @@ export const scopeQuestion = async () => {
 };
 
 export const answerQuestion = async () => {
-  return <{ country: string }>await prompt({
+  return <CountryAnswer>await prompt({
     type: 'autocomplete',
     name: 'country',
     message: 'Pilih satu negara',
