@@ -1,68 +1,68 @@
-import { prompt } from 'enquirer';
-import {
-  getCountriesName,
-  getCountriesSlug,
-  scopeChoices,
-  fieldChoices,
-} from './data';
+import { fieldChoices } from './choices';
 import { Subscriber, emitter } from './subscriber';
+import {
+  answerQuestion,
+  fieldQuestion,
+  loopQuestion,
+  scopeQuestion,
+} from './questions';
+import { getCountriesSlug } from './api';
+import { FieldAnswer } from './interfaces';
 
-// Pertanyaan
-const fieldQuestion = async () => {
-  return <{ field: string }>await prompt({
-    type: 'select',
-    name: 'field',
-    message: 'Informasi apa yang anda butuhkan?',
-    choices: Object.values(fieldChoices),
-  });
-};
-
-const scopeQuestion = async () => {
-  return <{ scope: string }>await prompt({
-    type: 'select',
-    name: 'scope',
-    message: 'Pilih global atau negara',
-    choices: Object.values(scopeChoices),
-  });
-};
-
-const answerQuestion = async () => {
-  return <{ country: string }>await prompt({
-    type: 'autocomplete',
-    name: 'country',
-    message: 'Pilih satu negara',
-    choices: await getCountriesName(),
-  });
-};
-
-const loopQuestion = async () => {
-  return <{ loop: string }>await prompt({
-    type: 'confirm',
-    name: 'loop',
-    message: 'Jalankan lagi?',
-  });
-};
-
-const loop = async (mqttClient: Subscriber) => {
+const askFieldQuestion = async (mqttClient: Subscriber) => {
   const fieldAnswer = await fieldQuestion();
+  for (const field of Object.entries(fieldChoices)) {
+    if (field[1] === fieldAnswer.field) {
+      if (field[0].startsWith('DayOne')) {
+        askCountryQuestion(mqttClient, fieldAnswer);
+      } else {
+        askScopeQuestion(mqttClient, fieldAnswer);
+      }
+    }
+  }
+};
+
+const askScopeQuestion = async (
+  mqttClient: Subscriber,
+  fieldAnswer: FieldAnswer
+) => {
   const scopeAnswer = await scopeQuestion();
   if (scopeAnswer.scope === 'Global') {
     // Subscribe ke topic sesuai dengan jawaban user
     Object.entries(fieldChoices).forEach(field => {
       if (field[1] === fieldAnswer.field) {
+        mqttClient.publish(
+          '/request',
+          JSON.stringify({ topic: `Global/${field[0]}` })
+        );
         mqttClient.subscribe(`Global/${field[0]}`);
       }
     });
   } else if (scopeAnswer.scope === 'Negara') {
-    const countryAnswer = await answerQuestion();
-    const slug = await getCountriesSlug(countryAnswer.country);
-    // Subscribe ke topic sesuai dengan jawaban user
-    Object.entries(fieldChoices).forEach(field => {
-      if (field[1] === fieldAnswer.field) {
-        mqttClient.subscribe(`Country/${slug}/${field[0]}`);
-      }
-    });
+    askCountryQuestion(mqttClient, fieldAnswer);
   }
+};
+
+const askCountryQuestion = async (
+  mqttClient: Subscriber,
+  fieldAnswer: FieldAnswer
+) => {
+  const countryAnswer = await answerQuestion();
+  const slug = await getCountriesSlug(countryAnswer.country);
+  // Subscribe ke topic sesuai dengan jawaban user
+  Object.entries(fieldChoices).forEach(field => {
+    if (field[1] === fieldAnswer.field) {
+      mqttClient.publish(
+        '/request',
+        JSON.stringify({ topic: `Country/${slug}/${field[0]}` })
+      );
+      mqttClient.subscribe(`Country/${slug}/${field[0]}`);
+    }
+  });
+};
+
+const loop = async (mqttClient: Subscriber) => {
+  askFieldQuestion(mqttClient);
 };
 
 const start = async () => {
