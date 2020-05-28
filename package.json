@@ -6,8 +6,11 @@
   "author": "Alvin Febriando <alvinfebriando@outlook.com>",
   "license": "MIT",
   "scripts": {
-    "start:dev": "npx concurrently 'npx tsc -w' 'npx nodemon build/server'",
-    "start": "npx tsc && node build/server"
+    "compile": "tsc",
+    "start:dev": "tsc && concurrently 'tsc -w' 'nodemon build/server' 'nodemon build/publisher'",
+    "start:server": "node build/server",
+    "start:publisher": "node build/publisher",
+    "start:client": "node build/client"
   },
   "dependencies": {
     "aedes": "^0.41.0",

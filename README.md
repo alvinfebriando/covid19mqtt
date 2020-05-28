@@ -6,10 +6,11 @@
 # Install dependencies
 npm install
 # Compile typescript to javascript
-npx tsc
-# Run publisher and server
-npx concurrently "node build/server" "node build/publisher"
+npm run compile
 
-# in another terminal
-node build/client
+# Terminal 1: start server and publisher
+npx concurrently "npm run start:server" "npm run start:publisher"
+
+# Terminal 2: start client
+npm run start:client
 ```
