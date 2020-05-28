@@ -22,7 +22,6 @@ const publish = async (client: MqttClient, scope: string, field: string) => {
       const fieldData = await getDayOneField(scope, field.substring(6));
       client.publish(`Country/${scope}/${field}`, JSON.stringify(fieldData));
     } else {
-      console.log('lol');
       const countryData = await getCountrySummary(scope);
       if (countryData) {
         client.publish(
