@@ -95,11 +95,11 @@ const getDayOneData = async (country: string) => {
 export const getDayOneField = async (country: string, field: string) => {
   await getDayOneData(country);
   const dayOneCountryData = dayOneData.get(country);
-  const mapped: Map<string, number> = new Map<string, number>();
+  const perDateData: { [index: string]: any } = {};
   if (dayOneCountryData) {
     dayOneCountryData.forEach(d => {
-      mapped.set(new Date(d.Date).toLocaleDateString(), d[field]);
+      perDateData[new Date(d.Date).toLocaleDateString()] = d[field];
     });
   }
-  return mapped;
+  return perDateData;
 };
