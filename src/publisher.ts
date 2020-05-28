@@ -5,7 +5,7 @@ import mqtt, {
   OnPacketCallback,
   MqttClient,
 } from 'mqtt';
-import { getGlobalSummary, getCountrySummary } from './api';
+import { getGlobalSummary, getCountrySummary, getDayOneField } from './api';
 
 const PROTOCOL = 'mqtt';
 const SERVER_URL = '127.0.0.1';
@@ -18,12 +18,18 @@ const publish = async (client: MqttClient, scope: string, field: string) => {
     const global = await getGlobalSummary();
     client.publish(`${scope}/${field}`, global[field].toString());
   } else {
-    const countryData = await getCountrySummary(scope);
-    if (countryData) {
-      client.publish(
-        `Country/${scope}/${field}`,
-        countryData[field].toString()
-      );
+    if (field.startsWith('DayOne')) {
+      const fieldData = await getDayOneField(scope, field.substring(6));
+      client.publish(`Country/${scope}/${field}`, JSON.stringify(fieldData));
+    } else {
+      console.log('lol');
+      const countryData = await getCountrySummary(scope);
+      if (countryData) {
+        client.publish(
+          `Country/${scope}/${field}`,
+          countryData[field].toString()
+        );
+      }
     }
   }
 };
