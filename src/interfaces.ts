@@ -39,4 +39,5 @@ export interface DayOne {
   Recovered: number;
   Active: number;
   Date: Date;
+  [index: string]: any;
 }

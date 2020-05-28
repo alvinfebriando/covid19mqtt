@@ -89,3 +89,14 @@ export const getDayOneData = async (country: string) => {
   const response = await got.get(`${API_URL}dayone/country/${country}`);
   dayOneData.set(country, <DayOne[]>JSON.parse(response.body));
 };
+
+export const getDayOneField = (country: string, field: string) => {
+  const dayOneCountryData = dayOneData.get(country);
+  const mapped: Map<string, number> = new Map<string, number>();
+  if (dayOneCountryData) {
+    dayOneCountryData.forEach(d => {
+      mapped.set(new Date(d.Date).toLocaleDateString(), d[field]);
+    });
+  }
+  return mapped;
+};
