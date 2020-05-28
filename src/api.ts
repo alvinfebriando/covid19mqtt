@@ -4,13 +4,14 @@ import {
   CountryCovidData,
   GlobalCovidData,
   Country,
+  DayOne,
 } from './interfaces';
 
 const API_URL = 'https://api.covid19api.com/';
 
 let summary: Summary;
 let lastAPICall: Date;
-let countriesData: Country[];
+let dayOneData: Map<string, DayOne[]> = new Map<string, DayOne[]>();
 
 type Field =
   | 'NewDeaths'
@@ -82,4 +83,9 @@ export const getCountriesName = async () => {
 export const getCountriesSlug = async (name: string) => {
   const countries = await getCountries();
   return countries.find(country => country.Country === name)?.Slug;
+};
+
+export const getDayOneData = async (country: string) => {
+  const response = await got.get(`${API_URL}dayone/country/${country}`);
+  dayOneData.set(country, <DayOne[]>JSON.parse(response.body));
 };
