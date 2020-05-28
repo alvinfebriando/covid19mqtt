@@ -7,15 +7,30 @@ import {
   scopeQuestion,
 } from './questions';
 import { getCountriesSlug } from './api';
+import { FieldAnswer } from './interfaces';
 
-const loop = async (mqttClient: Subscriber) => {
+const askFieldQuestion = async (mqttClient: Subscriber) => {
   const fieldAnswer = await fieldQuestion();
+  for (const field of Object.entries(fieldChoices)) {
+    if (field[1] === fieldAnswer.field) {
+      if (field[0].startsWith('DayOne')) {
+        askCountryQuestion(mqttClient, fieldAnswer);
+      } else {
+        askScopeQuestion(mqttClient, fieldAnswer);
+      }
+    }
+  }
+};
+
+const askScopeQuestion = async (
+  mqttClient: Subscriber,
+  fieldAnswer: FieldAnswer
+) => {
   const scopeAnswer = await scopeQuestion();
   if (scopeAnswer.scope === 'Global') {
     // Subscribe ke topic sesuai dengan jawaban user
     Object.entries(fieldChoices).forEach(field => {
       if (field[1] === fieldAnswer.field) {
-        // mqttClient.subscribe(`Global/${field[0]}`);
         mqttClient.publish(
           '/request',
           JSON.stringify({ topic: `Global/${field[0]}` })
@@ -24,19 +39,30 @@ const loop = async (mqttClient: Subscriber) => {
       }
     });
   } else if (scopeAnswer.scope === 'Negara') {
-    const countryAnswer = await answerQuestion();
-    const slug = await getCountriesSlug(countryAnswer.country);
-    // Subscribe ke topic sesuai dengan jawaban user
-    Object.entries(fieldChoices).forEach(field => {
-      if (field[1] === fieldAnswer.field) {
-        mqttClient.publish(
-          '/request',
-          JSON.stringify({ topic: `Country/${slug}/${field[0]}` })
-        );
-        mqttClient.subscribe(`Country/${slug}/${field[0]}`);
-      }
-    });
+    askCountryQuestion(mqttClient, fieldAnswer);
   }
+};
+
+const askCountryQuestion = async (
+  mqttClient: Subscriber,
+  fieldAnswer: FieldAnswer
+) => {
+  const countryAnswer = await answerQuestion();
+  const slug = await getCountriesSlug(countryAnswer.country);
+  // Subscribe ke topic sesuai dengan jawaban user
+  Object.entries(fieldChoices).forEach(field => {
+    if (field[1] === fieldAnswer.field) {
+      mqttClient.publish(
+        '/request',
+        JSON.stringify({ topic: `Country/${slug}/${field[0]}` })
+      );
+      mqttClient.subscribe(`Country/${slug}/${field[0]}`);
+    }
+  });
+};
+
+const loop = async (mqttClient: Subscriber) => {
+  askFieldQuestion(mqttClient);
 };
 
 const start = async () => {
