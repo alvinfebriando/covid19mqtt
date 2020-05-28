@@ -85,12 +85,15 @@ export const getCountriesSlug = async (name: string) => {
   return countries.find(country => country.Country === name)?.Slug;
 };
 
-export const getDayOneData = async (country: string) => {
-  const response = await got.get(`${API_URL}dayone/country/${country}`);
-  dayOneData.set(country, <DayOne[]>JSON.parse(response.body));
+const getDayOneData = async (country: string) => {
+  if (!dayOneData.has(country)) {
+    const response = await got.get(`${API_URL}dayone/country/${country}`);
+    dayOneData.set(country, <DayOne[]>JSON.parse(response.body));
+  }
 };
 
-export const getDayOneField = (country: string, field: string) => {
+export const getDayOneField = async (country: string, field: string) => {
+  await getDayOneData(country);
   const dayOneCountryData = dayOneData.get(country);
   const mapped: Map<string, number> = new Map<string, number>();
   if (dayOneCountryData) {
