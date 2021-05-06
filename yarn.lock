@@ -94,10 +94,10 @@ aedes-protocol-decoder@^1.0.0:
     forwarded "^0.1.2"
     proxy-protocol-js "^4.0.3"
 
-aedes@^0.41.0:
-  version "0.41.0"
-  resolved "https://registry.yarnpkg.com/aedes/-/aedes-0.41.0.tgz#62386f4596e83e25b3540d815a887c514ff038f1"
-  integrity sha512-GuRiw4GhoaHUFdg1ZI+b2s9hBYf0yd1TV3HB9UPmN4C6PJNSeDcUbgYWEP+cnXmUaIszOBW1RbsW/Fkqb/c2tQ==
+aedes@^0.42.1:
+  version "0.42.1"
+  resolved "https://registry.yarnpkg.com/aedes/-/aedes-0.42.1.tgz#3718689b7eab50113bd468fee45fd5e991c653ff"
+  integrity sha512-YlmgzE691UsTAugQ8SJVVpjv+Qc9m+TQJDvXCQ/bU3xnUohuGdaNWWt1u9KNLSbJhr+NDQPp10nuvq7UCTF7zQ==
   dependencies:
     aedes-packet "^2.3.1"
     aedes-persistence "^8.1.1"
@@ -107,15 +107,14 @@ aedes@^0.41.0:
     fastfall "^1.5.1"
     fastparallel "^2.3.0"
     fastseries "^2.0.0"
-    mqemitter "^4.1.2"
+    mqemitter "^4.2.0"
     mqtt-packet "^6.3.2"
     proxy-protocol-js "^4.0.4"
     readable-stream "^3.6.0"
     retimer "^2.0.0"
     reusify "^1.0.4"
     shortid "^2.2.15"
-    through2 "^3.0.1"
-    uuid "^7.0.2"
+    uuid "^8.0.0"
 
 ansi-align@^3.0.0:
   version "3.0.0"
@@ -1089,10 +1088,10 @@ minimist@^1.1.0, minimist@^1.2.0:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
 
-mqemitter@^4.1.2:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/mqemitter/-/mqemitter-4.2.0.tgz#a6f04f097757557b3c4482c7a14b9a297a7194fa"
-  integrity sha512-cAwS0+DfmsT9IDNkENo8uaiUjiN72c6rfGtW555ihl38gk1E91C7ZVF6sx040fVxMunCIDygMypyaCZ0L8X9UQ==
+mqemitter@^4.2.0:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/mqemitter/-/mqemitter-4.4.1.tgz#4cd2bc7d2fd5f2ba8c0c33ec68a8d70c9ff994ea"
+  integrity sha512-tXSsyzhsD70Jc7WFz1tjbfczGOAyObMhJ8O15ZFkpDI+g9ENmWFUo5BseAuS9HCxNnFtnMWo4lHh7yDi5CjVTQ==
   dependencies:
     fastparallel "^2.3.0"
     qlobber "^5.0.0"
@@ -1364,15 +1363,6 @@ read-pkg@^4.0.1:
     parse-json "^4.0.0"
     pify "^3.0.0"
 
-"readable-stream@2 || 3", readable-stream@^3.0.0, readable-stream@^3.1.1, readable-stream@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.6.0.tgz#337bbda3adc0706bd3e024426a286d4b4b2c9198"
-  integrity sha512-BViHy7LKeTz4oNnkcLJ+lVSL6vpiFeX6/d3oSH8zCW7UxP2onchk+vTGB143xuFjHS3deTgkKoXXymXqymiIdA==
-  dependencies:
-    inherits "^2.0.3"
-    string_decoder "^1.1.1"
-    util-deprecate "^1.0.1"
-
 "readable-stream@> 1.0.0 < 3.0.0", readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.1.5, readable-stream@^2.2.2, readable-stream@^2.3.3, readable-stream@^2.3.5, readable-stream@^2.3.6, readable-stream@~2.3.6:
   version "2.3.7"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.7.tgz#1eca1cf711aef814c04f62252a36a62f6cb23b57"
@@ -1385,6 +1375,15 @@ read-pkg@^4.0.1:
     safe-buffer "~5.1.1"
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
+
+readable-stream@^3.0.0, readable-stream@^3.1.1, readable-stream@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.6.0.tgz#337bbda3adc0706bd3e024426a286d4b4b2c9198"
+  integrity sha512-BViHy7LKeTz4oNnkcLJ+lVSL6vpiFeX6/d3oSH8zCW7UxP2onchk+vTGB143xuFjHS3deTgkKoXXymXqymiIdA==
+  dependencies:
+    inherits "^2.0.3"
+    string_decoder "^1.1.1"
+    util-deprecate "^1.0.1"
 
 readdirp@~3.4.0:
   version "3.4.0"
@@ -1650,13 +1649,6 @@ through2@^2.0.1, through2@~2.0.0:
     readable-stream "~2.3.6"
     xtend "~4.0.1"
 
-through2@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/through2/-/through2-3.0.1.tgz#39276e713c3302edf9e388dd9c812dd3b825bd5a"
-  integrity sha512-M96dvTalPT3YbYLaKaCuwu+j06D/8Jfib0o/PxbVt6Amhv3dUAtW6rTV1jPgJSBG83I/e04Y6xkVdVhSRhi0ww==
-  dependencies:
-    readable-stream "2 || 3"
-
 to-absolute-glob@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/to-absolute-glob/-/to-absolute-glob-2.0.2.tgz#1865f43d9e74b0822db9f145b78cff7d0f7c849b"
@@ -1789,10 +1781,10 @@ util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
-uuid@^7.0.2:
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
-  integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
+uuid@^8.0.0:
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 validate-npm-package-license@^3.0.1:
   version "3.0.4"

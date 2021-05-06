@@ -13,7 +13,7 @@
     "start:client": "node build/client"
   },
   "dependencies": {
-    "aedes": "^0.41.0",
+    "aedes": "^0.42.1",
     "enquirer": "^2.3.5",
     "got": "^11.1.1",
     "mqtt": "^4.0.0"
